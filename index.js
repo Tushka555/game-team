@@ -1,21 +1,25 @@
 const gameBoard = document.querySelector("#gameBoard");
 const ctx = gameBoard.getContext("2d");
+
 const scoreText = document.querySelector("#scoreText");
+
 const resetBtn = document.querySelector("#resetBtn");
+
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
-const boardBackground = "forestgreen";
+
+const boardBackground = "blue";
 const paddle1Color = "lightblue";
-const paddle2Color = "red";
+const paddle2Color = "gray";
 const paddleBorder = "black";
-const ballColor = "yellow";
+const ballColor = "white";
 const ballBorderColor = "black";
 const ballRadius = 12.5;
-const paddleSpeed = 50;
+const paddleSpeed = 100;
 let intervalID;
 let ballSpeed;
-let ballX = gameWidth / 2;
-let ballY = gameHeight / 2;
+let ballX = gameWidth / 2;  //250
+let ballY = gameHeight / 2;  //250
 let ballXDirection = 0;
 let ballYDirection = 0;
 let player1Score = 0;
@@ -57,15 +61,15 @@ function clearBoard(){
     ctx.fillRect(0, 0, gameWidth, gameHeight);
 };
 function drawPaddles(){
-    ctx.strokeStyle = paddleBorder;
-
-    ctx.fillStyle = paddle1Color;
-    ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
-    ctx.strokeRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
-
-    ctx.fillStyle = paddle2Color;
-    ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
-    ctx.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
+    ctx.strokeStyle = paddleBorder;  // Set the color of the stroke (border of the paddle)
+    ctx.fillStyle = paddle1Color;    // Set the color of the fill (inside of the paddle)
+    ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height); // Draw the filled rectangle (paddle1)
+    ctx.strokeRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height); // Draw the border around the paddle1
+    
+    ctx.fillStyle = paddle2Color;    // Set the color for paddle2's fill
+    ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height); // Draw the filled rectangle (paddle2)
+    ctx.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height); // Draw the border around paddle2
+    
 };
 function createBall(){
     ballSpeed = 1;
@@ -93,7 +97,7 @@ function drawBall(ballX, ballY){
     ctx.fillStyle = ballColor;
     ctx.strokeStyle = ballBorderColor;
     ctx.lineWidth = 2;
-    ctx.beginPath();
+    ctx.beginPath();   //shaping a ball
     ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.fill();
