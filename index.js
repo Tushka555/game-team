@@ -1,25 +1,21 @@
 const gameBoard = document.querySelector("#gameBoard");
 const ctx = gameBoard.getContext("2d");
-
 const scoreText = document.querySelector("#scoreText");
-
 const resetBtn = document.querySelector("#resetBtn");
-
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
-
-const boardBackground = "blue";
+const boardBackground = "forestgreen";
 const paddle1Color = "lightblue";
-const paddle2Color = "gray";
+const paddle2Color = "red";
 const paddleBorder = "black";
-const ballColor = "white";
+const ballColor = "yellow";
 const ballBorderColor = "black";
 const ballRadius = 12.5;
-const paddleSpeed = 100;
+const paddleSpeed = 50;
 let intervalID;
 let ballSpeed;
-let ballX = gameWidth / 2;  //250
-let ballY = gameHeight / 2;  //250
+let ballX = gameWidth / 2;
+let ballY = gameHeight / 2;
 let ballXDirection = 0;
 let ballYDirection = 0;
 let player1Score = 0;
@@ -61,18 +57,18 @@ function clearBoard(){
     ctx.fillRect(0, 0, gameWidth, gameHeight);
 };
 function drawPaddles(){
-    ctx.strokeStyle = paddleBorder;  // Set the color of the stroke (border of the paddle)
-    ctx.fillStyle = paddle1Color;    // Set the color of the fill (inside of the paddle)
-    ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height); // Draw the filled rectangle (paddle1)
-    ctx.strokeRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height); // Draw the border around the paddle1
-    
-    ctx.fillStyle = paddle2Color;    // Set the color for paddle2's fill
-    ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height); // Draw the filled rectangle (paddle2)
-    ctx.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height); // Draw the border around paddle2
-    
+    ctx.strokeStyle = paddleBorder;
+
+    ctx.fillStyle = paddle1Color;
+    ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
+    ctx.strokeRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
+
+    ctx.fillStyle = paddle2Color;
+    ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
+    ctx.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
 };
 function createBall(){
-    ballSpeed = 1;
+    ballSpeed = 5;
     if(Math.round(Math.random()) == 1){
         ballXDirection =  1; 
     }
@@ -93,15 +89,48 @@ function moveBall(){
     ballX += (ballSpeed * ballXDirection);
     ballY += (ballSpeed * ballYDirection);
 };
-function drawBall(ballX, ballY){
-    ctx.fillStyle = ballColor;
-    ctx.strokeStyle = ballBorderColor;
-    ctx.lineWidth = 2;
-    ctx.beginPath();   //shaping a ball
+
+// function drawBall(ballX, ballY){
+//     ctx.fillStyle = ballColor;
+//     ctx.strokeStyle = ballBorderColor;
+//     ctx.lineWidth = 2;
+//     ctx.beginPath();
+//     ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
+//     ctx.stroke();
+//     ctx.fill();
+// };
+
+function drawBall(ballX, ballY) {
+    // Create a glowing effect using a radial gradient for the ball
+    const ballGradient = ctx.createRadialGradient(ballX, ballY, 0, ballX, ballY, ballRadius);
+    
+    // Add color stops for the glowing effect (from white to orange)
+    ballGradient.addColorStop(0, 'rgba(255, 255, 255, 1)');  // Bright white center
+    ballGradient.addColorStop(1, 'rgba(255, 165, 0, 1)');    // Outer orange glow
+
+    // Draw the ball with a glowing effect
+    ctx.beginPath();
     ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
-    ctx.stroke();
+    ctx.fillStyle = ballGradient;
     ctx.fill();
-};
+
+    // Optional: Add a subtle trailing effect (similar to a shooting star tail)
+    // Create a faint shadow that extends behind the ball for a trailing effect
+    ctx.shadowColor = 'rgba(255, 255, 255, 0.7)';  // White shadow for the tail
+    ctx.shadowBlur = 20;  // Spread of the shadow for tail effect
+
+    // Draw the ball with the shadow effect (this will make it appear like a shooting star)
+    ctx.beginPath();
+    ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = ballGradient;
+    ctx.fill();
+
+    // Reset the shadow to avoid affecting other drawings on the canvas
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+}
+
+
 function checkCollision(){
     if(ballY <= 0 + ballRadius){
         ballYDirection *= -1;
